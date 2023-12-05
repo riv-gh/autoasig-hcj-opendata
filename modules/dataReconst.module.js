@@ -1,19 +1,4 @@
-function getParamsFromUrl(url) {
-    const params = {};
-    const regex = /([?&]\w+=[^&]*)/g;
-    let match;
-    while (match = regex.exec(url)) {
-        let [name, value] = match[1].substring(1).split('=');
-        params[name] = value;
-    }
-    return params;
-}
-
-function parseDate(dateString) {
-    const parts = dateString.split(/[\.\s\:]/)
-    const date = new Date(+parts[2], +parts[1]-1, +parts[0], parts[3], parts[4], 0)
-    return date
-}
+import { getParamsFromUrl, parseDate } from './functions.module.js';
 
 const dataReconst = (getDataArr) => {
     const dividedDataArr = 
@@ -51,6 +36,13 @@ const dataReconst = (getDataArr) => {
                 link: lineArr[5],
             }
         ],
+    }))
+    .map(dataItem => ({
+        ...dataItem,
+        assigArr: [{
+            ...dataItem.assigArr[0],
+            frameLink: `https://court.gov.ua/autoassig_vrp_log/${dataItem.id}/${dataItem.assigArr[0].num}`
+        }]
     }))
     const unicDataArr = 
     Array.from(new Set(dividedDataArr.map(dataObj=>dataObj.num)))

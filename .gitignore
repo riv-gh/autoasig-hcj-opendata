@@ -3,4 +3,6 @@ node_modules
 data/
 merged/
 result/
+reports/
+test/
 package-lock.json

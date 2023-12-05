@@ -4,6 +4,8 @@ import {
     MERGED_FILE_NAME,
     RESULT_FILE_FOLDER,
     RESULT_FILE_NAME,
+    REPORTS_FILES_FOLDER,
+    DOWNLOAD_REPORTS,
     FIND_BY_GET_DATE,
     START_YEAR,
     STOP_YEAR,
@@ -15,10 +17,11 @@ import {
     DISPLAY_BROWSER_WINDOW,
 } from './CONFIG.module.js'
 
-import getMountDateToFile from './autoassig.module.js';
-import filesToOneFile from './filesToOneFile.module.js';
-import dataReconst from './dataReconst.module.js';
-
+import getMountDateToFile from './modules/autoassig.module.js';
+import filesToOneFile from './modules/filesToOneFile.module.js';
+import dataReconst from './modules/dataReconst.module.js';
+import getReports from './modules/getReports.module.js';
+ 
 import fs from 'fs';
 import path from 'path';
 
@@ -40,6 +43,7 @@ import path from 'path';
         FILES_FOLDER,
         MERGED_FILE_FOLDER,
         RESULT_FILE_FOLDER,
+        REPORTS_FILES_FOLDER
     ]
     .forEach(folderName => {
         if (!fs.existsSync(folderName)){
@@ -134,6 +138,21 @@ import path from 'path';
                     path.resolve( RESULT_FILE_FOLDER, RESULT_FILE_NAME )                
                 );
             }
+            setTimeout(async()=>{
+                if (DOWNLOAD_REPORTS) {
+                    console.log('Отримання протоколів та створення файлів...');
+                        await getReports(
+                            JSON.parse(
+                                fs.readFileSync(path.resolve(
+                                    MERGED_FILE_FOLDER,
+                                    MERGED_FILE_NAME
+                                ))
+                            )
+                            .map(arr=>arr[5])
+                        )
+                    console.log('Отримання протоколів та створення файлів завершено!');
+                }
+            },1000);
         },1000);
     }, 1000);
 
