@@ -16,6 +16,10 @@ export function parseDate(dateString) {
 }
 
 export function getParsedDateFromString(stringWithDate) {
-    const dateStringReg = /\d+\.\d\d\.\d\d\d\d\s\d+\:\d\d\:\d\d/;
+    const dateStringReg = /\d+\.\d\d\.\d\d\d\d\s\d+\:\d\d\:\d\d/; ///\d+\.\d{2}\.\d{4}\s\d{2}:\d{2}:\d{2}/
     return parseDate(dateStringReg.exec(stringWithDate).toString());
+}
+
+export function twoDig(num) {
+    return String(num).padStart(2, '0');
 }

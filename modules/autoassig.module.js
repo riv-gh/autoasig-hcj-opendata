@@ -3,6 +3,8 @@ import puppteer from 'puppeteer';
 import fs from 'fs';
 import path from 'path';
 
+// import { twoDig } from './functions.module.js';
+
 const getMountDateToFile = async (mounth, year, folder='data', fromGetDate=false, visible=false) => {
 
     // const puppteer = require('puppeteer');
@@ -17,8 +19,8 @@ const getMountDateToFile = async (mounth, year, folder='data', fromGetDate=false
     const setMounthYear = async (m, y) => {
         const m2 = m===12 ? 1 : m+1;
         const y2 = m===12 ? y+1 : y;
-        const date1 = `01.${String(m).padStart(2, '0')}.${y}`;
-        const date2 = `01.${String(m2).padStart(2, '0')}.${y2}`;
+        const date1 = `01.${twoDig(m)}.${y}`;
+        const date2 = `01.${twoDig(m2)}.${y2}`;
 
         const radioButtonSelector = fromGetDate ? 'input[value="nadhodgennya"]' : 'input[value="rozpodil"]';
         const startDateSelector = fromGetDate ? 'input#sdate' : 'input#sdate2';
@@ -86,14 +88,14 @@ const getMountDateToFile = async (mounth, year, folder='data', fromGetDate=false
         );
     }
 
-    const doWait = async (milisec) => {
+    const doWait = async (milisec = 5000) => {
         await page.waitForTimeout(milisec);
     }
 
     // let dataArr = [];
     await setMounthYear(mounth,year);
     await doSearch();
-    await doWait(3000);
+    await doWait();
     // let dataArr = await getDataFromPage();
 
     let dataSet;
@@ -106,7 +108,7 @@ const getMountDateToFile = async (mounth, year, folder='data', fromGetDate=false
     hasNextPage = await nextPageAvaliable();
     while(hasNextPage) {
         await goNextPage();
-        await doWait(3000);
+        await doWait();
         tmpDataArr = await getDataFromPage();
         tmpDataArr.map(arr=>JSON.stringify(arr)).forEach(json=>dataSet.add(json))
         hasNextPage = await nextPageAvaliable();

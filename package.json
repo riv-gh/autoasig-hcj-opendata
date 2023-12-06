@@ -1,12 +1,13 @@
 {
   "name": "autoasig-hcj-opendata",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index.js & pause",
-    "test": "nodemon test.module.js"
+    "test": "nodemon test.module.js",
+    "maintest": "nodemon index.js"
   },
   "keywords": [
     "авторозподіл",

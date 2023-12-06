@@ -14,6 +14,8 @@ import {
     LOAD_NEW_DATA,
     CREATE_MREGED_FILE,
     CREATE_RESULT_FILE,
+    ADD_IMP_NUM_RESULT_FILE,
+    RESULT_IMP_NUM_FILE_NAME,
     DISPLAY_BROWSER_WINDOW,
 } from './CONFIG.module.js'
 
@@ -21,13 +23,16 @@ import getMountDateToFile from './modules/autoassig.module.js';
 import filesToOneFile from './modules/filesToOneFile.module.js';
 import dataReconst from './modules/dataReconst.module.js';
 import getReports from './modules/getReports.module.js';
+
  
 import fs from 'fs';
 import path from 'path';
 
+const delay = 1000;
+
 (async () => {
     console.log('      __    __  __  ____  _____     ');
-    console.log('     /__\\  (  )(  )(_  _)(  _  )    ');
+    console.log('     /__\\  (  )(  )(_  _)(  _  )   ');
     console.log('    /(__)\\  )(__)(   )(   )(_)(     ');
     console.log('   (__)(__)(______) (__) (_____)    ');
     console.log('        __    ___  ____  ___        ');
@@ -152,8 +157,42 @@ import path from 'path';
                         )
                     console.log('Отримання протоколів та створення файлів завершено!');
                 }
-            },1000);
-        },1000);
-    }, 1000);
+                setTimeout(()=>{
+                    if (ADD_IMP_NUM_RESULT_FILE) {
+                        console.log('Додання номерів впровадження до результуючого файлу...');
+                        fs.writeFileSync(
+                            path.resolve(
+                                RESULT_FILE_FOLDER,
+                                RESULT_IMP_NUM_FILE_NAME
+                            ),
+                            JSON.stringify(
+                                JSON.parse(
+                                    fs.readFileSync(path.resolve(
+                                        RESULT_FILE_FOLDER,
+                                        RESULT_FILE_NAME
+                                    ))
+                                )
+                                .map(dataItem=>({
+                                    impNum: (
+                                        /\d+/.exec(
+                                            fs.readFileSync(path.resolve(
+                                                REPORTS_FILES_FOLDER,
+                                                dataItem.assigArr[0].num+'.txt'                
+                                            )).toString()
+                                            .split('\n')
+                                            .find(line=>line.indexOf('I: Номер провадження:')===0)
+                                        )?.toString() || null
+                                    ),
+                                    ...dataItem,
+                                })),
+                            null, '\t')
+                        );
+                        console.log('Додання номерів впровадження до результуючого файлу завершено!');
+                    }
+                    
+                },delay)
+            },delay);
+        },delay);
+    }, delay);
 
 })();

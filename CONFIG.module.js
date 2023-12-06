@@ -27,13 +27,18 @@ export const FROM_LAST_DATE_TO_NOW = true;
 // [true або false] від останнього завантаженого до поточної дати
 // (ігнорує параметри діапазону дат [START_YEAR, STOP_YEAR]
 // але залежить від LOAD_NEW_DATA)
-export const LOAD_NEW_DATA = true;//true;
+export const LOAD_NEW_DATA = false;//true;
 // [true або false] збирати данні з сайту
 export const CREATE_MREGED_FILE = false;//true;
 // [true або false] об'єднувати файли в один
 export const CREATE_RESULT_FILE = false//true;
 // [true або false] обробити об'єдананний файл і створити результуючий
 // (потребує наявності об'єднаного файлу)
+export const ADD_IMP_NUM_RESULT_FILE = true;
+// [true або false] Додати номер впровадження до результуючого файлу
+// (потребує наявності результуючого файлу)
+export const RESULT_IMP_NUM_FILE_NAME = 'data_result_imp_num.json';
+// [строка] результуючого файлу з номером впровадження (розташовано в папці об'єднання)
 export const DISPLAY_BROWSER_WINDOW = true;
 // [true або false] обробити об'єдананний файл і створити результуючий
 // для відладки та пошуку проблем
