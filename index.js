@@ -1,4 +1,5 @@
 import {
+    USE_FETCH,
     FILES_FOLDER,
     MERGED_FILE_FOLDER,
     MERGED_FILE_NAME,
@@ -16,17 +17,25 @@ import {
     CREATE_RESULT_FILE,
     ADD_IMP_NUM_RESULT_FILE,
     RESULT_IMP_NUM_FILE_NAME,
+    PARSE_REPORT,
+    RESULT_REPORT_PARSED_FILE,
     DISPLAY_BROWSER_WINDOW,
 } from './CONFIG.module.js'
 
-import getMountDateToFile from './modules/autoassig.module.js';
+
+import getMounthDateToFilePPTR from './modules/getMounthDateToFilePPTR.module.js';
+import getMounthDateToFileFetch from './modules/getMounthDateToFileFetch.module.js';
 import filesToOneFile from './modules/filesToOneFile.module.js';
 import dataReconst from './modules/dataReconst.module.js';
 import getReports from './modules/getReports.module.js';
 
+
+const getMounthDateToFile = USE_FETCH ? getMounthDateToFileFetch : getMounthDateToFilePPTR;
  
 import fs from 'fs';
 import path from 'path';
+
+import { dateReverseFormat, parseDate } from './modules/functions.module.js';
 
 const delay = 1000;
 
@@ -90,8 +99,8 @@ const delay = 1000;
             let y = startYear;
             let m = startMounth;
             do {
-                await getMountDateToFile(m, y, FILES_FOLDER, false, DISPLAY_BROWSER_WINDOW);
-                // console.log(`await getMountDateToFile(${m}, ${y}, ${FILES_FOLDER}, false);`);
+                await getMounthDateToFile(m, y, FILES_FOLDER, false, DISPLAY_BROWSER_WINDOW);
+                // console.log(`await getMounthDateToFile(${m}, ${y}, ${FILES_FOLDER}, false);`);
                 y = (m>=12) ? y+1 : y;
                 m = (m>=12) ? 1 : m+1;
             } while (
@@ -103,7 +112,7 @@ const delay = 1000;
             console.log(`Діапазон років пошуку: ${START_YEAR}-${STOP_YEAR}`);
             for (let y=START_YEAR; y<STOP_YEAR; y++) {
                 for (let m=1; m<13; m++) {
-                    await getMountDateToFile(m, y, FILES_FOLDER, FIND_BY_GET_DATE, FIND_BY_GET_DATE);
+                    await getMounthDateToFile(m, y, FILES_FOLDER, FIND_BY_GET_DATE, FIND_BY_GET_DATE);
                 }
             }
         }
@@ -172,13 +181,35 @@ const delay = 1000;
                                         RESULT_FILE_NAME
                                     ))
                                 )
+                                // .map(dataItem=>({
+                                //     impNum: (
+                                //         /\d+/.exec(
+                                //             fs.readFileSync(path.resolve(
+                                //                 REPORTS_FILES_FOLDER,
+                                //                 dataItem.assigArr[0].num+'.txt'                
+                                //             )).toString()
+                                //             .split('\n')
+                                //             .find(line=>line.indexOf('I: Номер провадження:')===0)
+                                //         )?.toString() || null
+                                //     ),
+                                //     ...dataItem,
+                                // })),
+                                .map(dataItem=>({
+                                    ...dataItem,
+                                    assigArr: dataItem.assigArr.map(assigItem=>({
+                                        ...assigItem,
+                                        reportFullText: (
+                                            fs.readFileSync(path.resolve(
+                                                REPORTS_FILES_FOLDER,
+                                                assigItem.num+'.txt'                
+                                            )).toString()
+                                        )
+                                    }))
+                                }))
                                 .map(dataItem=>({
                                     impNum: (
                                         /\d+/.exec(
-                                            fs.readFileSync(path.resolve(
-                                                REPORTS_FILES_FOLDER,
-                                                dataItem.assigArr[0].num+'.txt'                
-                                            )).toString()
+                                            dataItem.assigArr[0].reportFullText
                                             .split('\n')
                                             .find(line=>line.indexOf('I: Номер провадження:')===0)
                                         )?.toString() || null
@@ -189,7 +220,71 @@ const delay = 1000;
                         );
                         console.log('Додання номерів впровадження до результуючого файлу завершено!');
                     }
-                    
+                    setTimeout(()=>{
+                        if (PARSE_REPORT) {
+                            console.log('Аналізування тексту протоколів...')
+                            fs.writeFileSync(
+                                path.resolve(
+                                    RESULT_FILE_FOLDER,
+                                    RESULT_REPORT_PARSED_FILE
+                                ),
+                                JSON.stringify(
+                                    JSON.parse(
+                                        fs.readFileSync(path.resolve(
+                                            RESULT_FILE_FOLDER,
+                                            RESULT_IMP_NUM_FILE_NAME
+                                        ))
+                                    )
+                                    .map(dataItem=>({
+                                        ...dataItem,
+                                        assigArr: dataItem.assigArr.map(assigItem=>({
+                                            ...assigItem,
+                                            assigMembersData: (
+                                                assigItem.reportFullText
+                                                .split('\n')
+                                                .filter(line=>/^\d+\s/.test(line))
+                                                .map(line=>(
+                                                    line.replace(/^\d+\s+/gi,'')
+                                                    .split(';')
+                                                    .map(item=>item.trim())
+                                                ))
+                                                .map(arr=>{
+                                                    try {
+                                                        // return arr;
+                                                        const [member, periodStart, periodStop] = arr[0].split(/\s+період з\s+|\s+до\s+/)
+                                                        // const weight = arr.find(item=>item.indexOf(/Матеріалів розподілено\(приведена вага\)\:\s+/)==0)
+                                                        const weight = +arr.find(item=>item.indexOf('Матеріалів розподілено')===0)?.split(':')[1].trim().replace(',','.');
+                                                        const interval = arr.find(item=>item.indexOf('Інтервал')===0).split(' ')[1].split('-').map(str=>+str);
+                                                        const workedDay = +arr.find(item=>item.indexOf('Відпрацьовано:')===0).split(':')[1].trim();
+                                                        const kn = +arr.find(item=>item.indexOf('КН')===0).split(' ')[1].trim().replace(',','.');
+                                                        const kap = +arr.find(item=>item.indexOf('КАП')===0).split(' ')[1].trim().replace(',','.');
+                                    
+                                                        // const kap = 
+                                                        // return null
+                                                        return {
+                                                            member,
+                                                            priod: [dateReverseFormat(periodStart), dateReverseFormat(periodStop)],
+                                                            workedDay,
+                                                            weight,
+                                                            kn,
+                                                            interval,
+                                                            kap,
+                                                        }
+                                                    }
+                                                    catch { }
+                                                    return null;
+                                                })
+                                                
+                                            ),
+                                        }))
+                                    }))
+
+                                    .filter(dataItem=>dataItem.num==='Л-184/0/7-22')
+                                ,null, '  ')
+                            )
+                            console.log('Аналізування тексту протоколів завершено!')
+                        }
+                    },delay)
                 },delay)
             },delay);
         },delay);

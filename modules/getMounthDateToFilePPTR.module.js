@@ -1,16 +1,16 @@
-// const puppteer = require('puppeteer');
-import puppteer from 'puppeteer';
+// const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer';
 import fs from 'fs';
 import path from 'path';
 
-// import { twoDig } from './functions.module.js';
+import { twoDig } from './functions.module.js';
 
-const getMountDateToFile = async (mounth, year, folder='data', fromGetDate=false, visible=false) => {
+const getMounthDateToFile = async (mounth, year, folder='data', fromGetDate=false, visible=false) => {
 
-    // const puppteer = require('puppeteer');
+    // const puppeteer = require('puppeteer');
     const thisHeadless = visible ? false : "new";
 
-    const browser = await puppteer.launch({
+    const browser = await puppeteer.launch({
         headless: thisHeadless
     });
     const page = await browser.newPage();
@@ -116,19 +116,19 @@ const getMountDateToFile = async (mounth, year, folder='data', fromGetDate=false
 
     const dataArr = Array.from(dataSet).map(json=>JSON.stringify(json));
     if (dataArr[0]==='"[\\"Справи відсутні\\"]"') {
-        console.log(`Данні за ${mounth}.${year} відсутні!`);
+        console.log(`Данні за ${twoDig(mounth)}.${year} відсутні!`);
     }
     else {
-        const fileName = `data_${year}_${String(mounth).padStart(2, '0')}.json`;
+        const fileName = `data_${year}_${twoDig(mounth)}.json`;
         // fs.writeFile(path.resolve(folder,fileName),JSON.stringify(dataArr), ()=>{
         //     console.log(`Данні за ${mounth}.${year} збережені в файлі ${fileName}`);
         // });
         fs.writeFileSync (path.resolve(folder,fileName), JSON.stringify(dataArr));
-        console.log(`Данні за ${mounth}.${year} збережені в файлі ${fileName}`);
+        console.log(`Данні за ${twoDig(mounth)}.${year} збережені в файлі ${fileName}`);
 
         await doWait(1000);
     }
     await browser.close();
 }
 
-export default getMountDateToFile;
+export default getMounthDateToFile;

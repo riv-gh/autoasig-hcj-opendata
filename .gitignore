@@ -5,4 +5,14 @@ merged/
 result/
 reports/
 test/
+data_pptr/
+merged_pptr/
+result_pptr/
+reports_pptr/
+test_pptr/
+data_fetch/
+merged_fetch/
+result_fetch/
+reports_fetch/
+test_fetch/
 package-lock.json
