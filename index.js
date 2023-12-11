@@ -37,7 +37,9 @@ import path from 'path';
 
 import { dateReverseFormat, parseDate } from './modules/functions.module.js';
 
-const delay = 1000;
+const delay = 3000;
+
+const tmp_nums = [];
 
 (async () => {
     console.log('      __    __  __  ____  _____     ');
@@ -242,7 +244,7 @@ const delay = 1000;
                                             assigMembersData: (
                                                 assigItem.reportFullText
                                                 .split('\n')
-                                                .filter(line=>/^\d+\s/.test(line))
+                                                .filter(line=>/^\d+\s.+період/.test(line))
                                                 .map(line=>(
                                                     line.replace(/^\d+\s+/gi,'')
                                                     .split(';')
@@ -253,8 +255,13 @@ const delay = 1000;
                                                         // return arr;
                                                         const [member, periodStart, periodStop] = arr[0].split(/\s+період з\s+|\s+до\s+/)
                                                         // const weight = arr.find(item=>item.indexOf(/Матеріалів розподілено\(приведена вага\)\:\s+/)==0)
-                                                        const weight = +arr.find(item=>item.indexOf('Матеріалів розподілено')===0)?.split(':')[1].trim().replace(',','.');
-                                                        const interval = arr.find(item=>item.indexOf('Інтервал')===0).split(' ')[1].split('-').map(str=>+str);
+                                                        const weight = (
+                                                            +arr.find(item=>(
+                                                                item.indexOf('Матеріалів розподілено')===0 ||
+                                                                item.indexOf('Справ розглянуто')===0
+                                                            ))?.split(':')[1].trim().replace(',','.')
+                                                        );
+                                                        const interval = arr.find(item=>item.indexOf('Інтервал')===0)?.split(' ')[1].split('-').map(str=>+str);
                                                         const workedDay = +arr.find(item=>item.indexOf('Відпрацьовано:')===0).split(':')[1].trim();
                                                         const kn = +arr.find(item=>item.indexOf('КН')===0).split(' ')[1].trim().replace(',','.');
                                                         const kap = +arr.find(item=>item.indexOf('КАП')===0).split(' ')[1].trim().replace(',','.');
@@ -271,7 +278,11 @@ const delay = 1000;
                                                             kap,
                                                         }
                                                     }
-                                                    catch { }
+                                                    catch(err) {
+                                                        console.log(err, dataItem.num)
+                                                        // tmp_nums.push({num: dataItem.num, id: dataItem.id})
+                                                        tmp_nums.push(dataItem)
+                                                    }
                                                     return null;
                                                 })
                                                 
@@ -279,9 +290,18 @@ const delay = 1000;
                                         }))
                                     }))
 
-                                    .filter(dataItem=>dataItem.num==='Л-184/0/7-22')
-                                ,null, '  ')
-                            )
+                                    // .filter(dataItem=>dataItem.num==='Л-184/0/7-22')
+                                ,null, '\t')
+                            );
+                            console.log(tmp_nums)
+                            fs.writeFileSync('test.json',JSON.stringify((
+                                Array.from(
+                                    new Set(
+                                        tmp_nums.map(el=>JSON.stringify(el))
+                                    )
+                                )
+                                .map(json_el=>JSON.parse(json_el))
+                            ) ,null, '\t'));
                             console.log('Аналізування тексту протоколів завершено!')
                         }
                     },delay)

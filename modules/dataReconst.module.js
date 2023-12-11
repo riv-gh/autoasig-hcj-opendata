@@ -1,4 +1,4 @@
-import { getParamsFromUrl, parseDate } from './functions.module.js';
+import { getParamsFromUrl, parseDate, dateReverseFormat  } from './functions.module.js';
 
 const dataReconst = (getDataArr) => {
     const dividedDataArr = 
@@ -12,7 +12,7 @@ const dataReconst = (getDataArr) => {
     .map(lineArr => ({
         num: lineArr[0],
         id: getParamsFromUrl(lineArr[5]).log,
-        regData: lineArr[1],
+        regData: dateReverseFormat(lineArr[1]),
         persons: (()=>{
             const personsArr =
             lineArr[3]

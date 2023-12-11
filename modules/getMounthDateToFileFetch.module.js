@@ -19,7 +19,7 @@ const getMounthDateToFile = async (mounth, year, folder='test', fromGetDate=fals
     let startPos = 0;
     let recordsCount = Infinity;
     let dataArr = [];
-    const dateType = !fromGetDate ? 'nadhodgennya' : 'rozpodil';
+    const dateType = !fromGetDate ? 'nadhodgennya' : 'rozpodil'; //немного напутано на бекнде
     do{
         const response = await fetch("https://court.gov.ua/post_test_vrp.php", {
             "headers": {
@@ -49,10 +49,11 @@ const getMounthDateToFile = async (mounth, year, folder='test', fromGetDate=fals
 
         // console.log(responseJson)
 
-        recordsCount = responseJson.iTotalDisplayRecords
+        recordsCount = responseJson.iTotalDisplayRecords;
         // console.log(recordsCount)
-        dataArr = dataArr.concat(responseJson.aaData)
-        startPos+=10
+        dataArr = dataArr.concat(responseJson.aaData);
+        startPos+=10;
+        console.log(`Данні за ${twoDig(mounth)}.${year} завантаження: ${startPos}/${recordsCount}`);
         // console.log(dataArr.length)
     } while(startPos<=recordsCount)
     // console.log(dataArr)

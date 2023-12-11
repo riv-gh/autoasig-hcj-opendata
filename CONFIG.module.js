@@ -23,7 +23,7 @@ export const START_YEAR = 2014;
 // [число] розпочати з року
 export const STOP_YEAR = 2015;
 // [число] закінчити до року (НЕ включно)
-export const CLEAR_OLD_DATA = true;
+export const CLEAR_OLD_DATA = false;
 // [true або false] видалити старі завантаження
 export const FROM_LAST_DATE_TO_NOW = true;
 // [true або false] від останнього завантаженого до поточної дати
