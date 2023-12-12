@@ -1,7 +1,7 @@
 {
   "name": "autoasig-hcj-opendata",
   "type": "module",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,7 @@
   "author": "daenur <daenur@outlook.com>",
   "license": "ISC",
   "dependencies": {
+    "iconv-lite": "^0.6.3",
     "puppeteer": "^21.5.2"
   }
 }
