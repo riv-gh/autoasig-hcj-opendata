@@ -34,7 +34,8 @@ async function getReport(log=38286393, doc=38288769) {
 
     const responseArrayBuffer = await response.arrayBuffer();
 
-    const responseBuffer = new Buffer(responseArrayBuffer)
+    // const responseBuffer = new Buffer(responseArrayBuffer)
+    const responseBuffer = Buffer.from(responseArrayBuffer)
 
     return (iconv.decode(responseBuffer, 'windows-1251')).trim()
 }

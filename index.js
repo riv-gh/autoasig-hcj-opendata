@@ -22,6 +22,12 @@ import {
     DISPLAY_BROWSER_WINDOW,
 } from './CONFIG.module.js'
 
+//додаємо toReversed у разі відсутності
+if (!Array.prototype.toReversed) {
+    Array.prototype.toReversed = function () {
+        return Array.from(this).reverse();
+    };
+}
 
 import getMounthDateToFilePPTR from './modules/getMounthDateToFilePPTR.module.js';
 import getMounthDateToFileFetch from './modules/getMounthDateToFileFetch.module.js';
