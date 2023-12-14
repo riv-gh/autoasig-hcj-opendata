@@ -20,7 +20,7 @@ import {
     PARSE_REPORT,
     RESULT_REPORT_PARSED_FILE,
     DISPLAY_BROWSER_WINDOW,
-} from './CONFIG.module.js'
+} from './CONFIG.js'
 
 //додаємо toReversed у разі відсутності
 if (!Array.prototype.toReversed) {

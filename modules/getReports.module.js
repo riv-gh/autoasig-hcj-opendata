@@ -2,7 +2,7 @@ import {
     REPORTS_FILES_FOLDER,
     DISPLAY_BROWSER_WINDOW,
     USE_FETCH,
-} from '../CONFIG.module.js'
+} from '../CONFIG.js'
 
 import { getParamsFromUrl } from './functions.module.js';
 import saveReportFromLinkPPTR from './saveReportFromLinkPPTR.module.js';
