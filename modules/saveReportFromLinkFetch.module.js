@@ -3,10 +3,10 @@ import iconv from 'iconv-lite';
 
 const saveReportFromLink = async (log, doc, filePath) => {
     const reportText = await getReport(log, doc);
-    fs.writeFileSync(filePath,reportText);
+    fs.writeFileSync(filePath, reportText);
 }
 
-async function getReport(log=38286393, doc=38288769) {
+async function getReport(log = 38286393, doc = 38288769) {
     const response = await fetch("https://court.gov.ua/logs.php", {
         "headers": {
             "accept": "text/plain, */*; q=0.01",
@@ -22,15 +22,18 @@ async function getReport(log=38286393, doc=38288769) {
             "sec-fetch-site": "same-origin",
             "x-requested-with": "XMLHttpRequest"
         },
+        // "referrer": "https://court.gov.ua/autoassig_vrp_log/38212011/38222911",
         "referrer": `https://court.gov.ua/autoassig_vrp_log/${doc}/${log}`,
         "referrerPolicy": "strict-origin-when-cross-origin",
-        "body": "doc_ver=54_2&did=38288769&ddid=9993",
+        "body": "doc_ver=54_2&did=38222911&ddid=9993",
         "method": "POST",
         "mode": "cors",
-        "credentials": "include"
+        "credentials": "omit"
     });
 
-    // const contentType = response.headers.get('content-type');
+
+    const contentType = response.headers.get('content-type');
+    console.log(contentType)
 
     const responseArrayBuffer = await response.arrayBuffer();
 
