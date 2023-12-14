@@ -9,7 +9,7 @@
 Для запуску запланованного щоденного збору - `npm run scheduler`
 
 Налаштування можна змінити в файлі
-[CONFIG.js](https://github.com/riv-gh/autoasig-hcj-opendata/blob/main/CONFIG.module.js)
+[CONFIG.js](https://github.com/riv-gh/autoasig-hcj-opendata/blob/main/CONFIG.js)
 в корені папки вашого проекту
 
 Перед першим запуском потрібно встановити необхідні для роботи модулі комндою `npm install`
