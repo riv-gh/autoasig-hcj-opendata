@@ -25,7 +25,8 @@ async function getReport(log = 38286393, doc = 38288769) {
         // "referrer": "https://court.gov.ua/autoassig_vrp_log/38212011/38222911",
         "referrer": `https://court.gov.ua/autoassig_vrp_log/${doc}/${log}`,
         "referrerPolicy": "strict-origin-when-cross-origin",
-        "body": "doc_ver=54_2&did=38222911&ddid=9993",
+        // "body": "doc_ver=54_2&did=38222911&ddid=9993",
+        "body": `doc_ver=54_2&did=${log}&ddid=9993`,
         "method": "POST",
         "mode": "cors",
         "credentials": "omit"
