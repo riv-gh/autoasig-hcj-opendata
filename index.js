@@ -1,7 +1,27 @@
+console.log('      __    __  __  ____  _____     ');
+console.log('     /__\\  (  )(  )(_  _)(  _  )   ');
+console.log('    /(__)\\  )(__)(   )(   )(_)(     ');
+console.log('   (__)(__)(______) (__) (_____)    ');
+console.log('        __    ___  ____  ___        ');
+console.log('       /__\\  / __)(_  _)/ __)       ');
+console.log('      /(__)\\ \\__ \\ _)(_( (_-.       ');
+console.log('     (__)(__)(___/(____)\\___/       ');
+console.log('        _   _  ___   ____           ');
+console.log('       ( )_( )/ __) (_  _)          ');
+console.log('        ) _ (( (__ .-_)(            ');
+console.log('       (_) (_)\\___)\\____)           ');
+
+
 const CONFIG_FILENAME = 'CONFIG.js';
 let usedConfigFilename =  'CONFIG_DEFAULT.js';
 
-if (fs.existsSync(CONFIG_FILENAME)){
+if (!fs.existsSync(CONFIG_FILENAME)){
+    console.log(
+        `Файл ${CONFIG_FILENAME} відсутній!\n`+
+        `Використовується файл конфгурації за замовченням ${usedConfigFilename}`
+    )
+}
+else {
     usedConfigFilename = CONFIG_FILENAME;
 }
 
@@ -55,19 +75,6 @@ const delay = 3000;
 const tmp_nums = [];
 
 (async () => {
-    console.log('      __    __  __  ____  _____     ');
-    console.log('     /__\\  (  )(  )(_  _)(  _  )   ');
-    console.log('    /(__)\\  )(__)(   )(   )(_)(     ');
-    console.log('   (__)(__)(______) (__) (_____)    ');
-    console.log('        __    ___  ____  ___        ');
-    console.log('       /__\\  / __)(_  _)/ __)       ');
-    console.log('      /(__)\\ \\__ \\ _)(_( (_-.       ');
-    console.log('     (__)(__)(___/(____)\\___/       ');
-    console.log('        _   _  ___   ____           ');
-    console.log('       ( )_( )/ __) (_  _)          ');
-    console.log('        ) _ (( (__ .-_)(            ');
-    console.log('       (_) (_)\\___)\\____)           ');
-
     [
         FILES_FOLDER,
         MERGED_FILE_FOLDER,
