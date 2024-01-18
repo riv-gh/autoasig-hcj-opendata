@@ -3,6 +3,7 @@ import iconv from 'iconv-lite';
 
 const saveReportFromLink = async (log, doc, filePath) => {
     const reportText = await getReport(log, doc);
+    // console.log(reportText);
     fs.writeFileSync(filePath, reportText);
 }
 
@@ -30,18 +31,19 @@ async function getReport(log = 38286393, doc = 38288769) {
         "method": "POST",
         "mode": "cors",
         "credentials": "omit"
+        // "credentials": "include"
     });
 
-
     const contentType = response.headers.get('content-type');
-    console.log(contentType)
 
-    const responseArrayBuffer = await response.arrayBuffer();
+    // if (contentType.includes('windows-1251')) {
+        const responseArrayBuffer = await response.arrayBuffer();
+        // console.log(responseArrayBuffer)
+        const responseBuffer = Buffer.from(responseArrayBuffer);
+        return (iconv.decode(responseBuffer, 'windows-1251')).trim();
+    // }
 
-    // const responseBuffer = new Buffer(responseArrayBuffer)
-    const responseBuffer = Buffer.from(responseArrayBuffer)
-
-    return (iconv.decode(responseBuffer, 'windows-1251')).trim()
+    // return ( await response.text().trim() );
 }
 
 export default saveReportFromLink;
