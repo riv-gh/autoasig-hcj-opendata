@@ -11,14 +11,17 @@ console.log('       ( )_( )/ __) (_  _)          ');
 console.log('        ) _ (( (__ .-_)(            ');
 console.log('       (_) (_)\\___)\\____)           ');
 
+import fs from 'fs';
+import path from 'path';
 
 const CONFIG_FILENAME = 'CONFIG.js';
 let usedConfigFilename =  'CONFIG_DEFAULT.js';
 
-if (!fs.existsSync(CONFIG_FILENAME)){
+if (!fs.existsSync(path.resolve(CONFIG_FILENAME))){
     console.log(
         `Файл ${CONFIG_FILENAME} відсутній!\n`+
-        `Використовується файл конфгурації за замовченням ${usedConfigFilename}`
+        `Використовується файл конфгурації за замовченням ${usedConfigFilename}\n`+
+        `Для своєї конфігурації створіть файл за шляхом:\n${path.resolve(CONFIG_FILENAME)}`
     )
 }
 else {
@@ -65,9 +68,6 @@ import getReports from './modules/getReports.module.js';
 
 const getMounthDateToFile = USE_FETCH ? getMounthDateToFileFetch : getMounthDateToFilePPTR;
  
-import fs from 'fs';
-import path from 'path';
-
 import { dateReverseFormat, parseDate } from './modules/functions.module.js';
 
 const delay = 3000;
