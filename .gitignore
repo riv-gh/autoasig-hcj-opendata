@@ -16,3 +16,4 @@ result_fetch/
 reports_fetch/
 test_fetch/
 package-lock.json
+CONFIG.js
