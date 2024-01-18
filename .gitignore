@@ -4,7 +4,9 @@ data/
 merged/
 result/
 reports/
+per_month/
 test/
+data0/
 data_pptr/
 merged_pptr/
 result_pptr/

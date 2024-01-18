@@ -14,8 +14,8 @@ console.log('       (_) (_)\\___)\\____)           ');
 import fs from 'fs';
 import path from 'path';
 
-const CONFIG_FILENAME = 'CONFIG.js';
-let usedConfigFilename =  'CONFIG_DEFAULT.js';
+const CONFIG_FILENAME = './CONFIG.js';
+let usedConfigFilename =  './CONFIG_DEFAULT.js';
 
 if (!fs.existsSync(path.resolve(CONFIG_FILENAME))){
     console.log(
@@ -34,6 +34,8 @@ const {
     MERGED_FILE_FOLDER,
     TYPE_OF_RAW_DATA_PROCESSING,
     MERGED_FILE_NAME,
+    PER_MONTH_FILE_FOLDER,
+    PER_MONTH_FILE_PREFIX,
     RESULT_FILE_FOLDER,
     RESULT_FILE_NAME,
     REPORTS_FILES_FOLDER,
@@ -79,7 +81,8 @@ const tmp_nums = [];
         FILES_FOLDER,
         MERGED_FILE_FOLDER,
         RESULT_FILE_FOLDER,
-        REPORTS_FILES_FOLDER
+        REPORTS_FILES_FOLDER,
+        PER_MONTH_FILE_FOLDER,
     ]
     .forEach(folderName => {
         if (!fs.existsSync(folderName)){
@@ -334,12 +337,33 @@ const tmp_nums = [];
             break;
         case 'PER_MONTH':
             console.log('todo');
-            console.log(
-                dataReconst(
-                    fs.readFileSync(path.resolve('data', 'data_2014_09.json'))
-                )
-            );
-            
+            if (CREATE_RESULT_FILE) {
+                console.log(`Створення результуючих файлів [./${PER_MONTH_FILE_FOLDER}/${PER_MONTH_FILE_PREFIX}*]...`);
+                fs.readdirSync(path.resolve(FILES_FOLDER))
+                .map(name=>({
+                    name: name,
+                    newText: JSON.stringify(
+                        dataReconst(
+                            JSON.parse(
+                                fs.readFileSync(
+                                    path.resolve(
+                                        FILES_FOLDER,
+                                        name
+                                    )
+                                )
+                            )
+                            .map(data=>JSON.parse(JSON.parse(data)))
+                        )
+                    ),
+                }))
+                .forEach(o => {
+                    fs.writeFileSync(
+                        path.resolve(PER_MONTH_FILE_FOLDER, PER_MONTH_FILE_PREFIX + o.name),
+                        o.newText
+                    )
+                });
+                console.log(`Створення результуючих файлів [./${PER_MONTH_FILE_FOLDER}/${PER_MONTH_FILE_PREFIX}*] завершено!`);
+            }
             break;
         default:
             console.warn(
