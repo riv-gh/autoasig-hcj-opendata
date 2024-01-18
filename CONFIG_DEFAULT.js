@@ -4,8 +4,12 @@ export const USE_FETCH = true;
 // [true або false] використовувати fetch або pptr
 export const FILES_FOLDER = 'data';
 // [строка] папка для збереження файлів помісячно
-export const MERGED_TO_ONE_FILE = false;
-// [true або false] чи об'єднувати в один файл (варіант true в розробці)
+// export const MERGED_TO_ONE_FILE = false;
+// // [true або false] чи об'єднувати в один файл (варіант true в розробці)
+export const TYPE_OF_RAW_DATA_PROCESSING = 'MERGED_TO_ONE';
+// ['MERGED_TO_ONE', 'PER_MONTH'] один з варіантів
+// MERGED_TO_ONE - об'єднувати в один результуючий файл
+// PER_MONTH - обробляти кожен місяць окремо
 export const MERGED_FILE_FOLDER = 'merged';
 // [строка] папка для збереження файлу об'єднання
 export const MERGED_FILE_NAME = 'data_merged.json';

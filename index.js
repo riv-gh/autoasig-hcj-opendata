@@ -28,6 +28,8 @@ else {
     usedConfigFilename = CONFIG_FILENAME;
 }
 
+console.log(usedConfigFilename)
+
 import {
     USE_FETCH,
     FILES_FOLDER,
@@ -334,6 +336,11 @@ const tmp_nums = [];
             break;
         case 'PER_MONTH':
             console.log('todo');
+            console.log(
+                dataReconst(
+                    fs.readFileSync(path.resolve('data', 'data_2014_09.json'))
+                )
+            );
             
             break;
         default:
