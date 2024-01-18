@@ -28,9 +28,7 @@ else {
     usedConfigFilename = CONFIG_FILENAME;
 }
 
-console.log(usedConfigFilename)
-
-import {
+const {
     USE_FETCH,
     FILES_FOLDER,
     MERGED_FILE_FOLDER,
@@ -53,7 +51,7 @@ import {
     PARSE_REPORT,
     RESULT_REPORT_PARSED_FILE,
     DISPLAY_BROWSER_WINDOW,
-} from usedConfigFilename;
+} = await import(usedConfigFilename);
 
 //додаємо toReversed у разі відсутності
 if (!Array.prototype.toReversed) {
